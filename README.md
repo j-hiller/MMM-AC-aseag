@@ -24,7 +24,6 @@ To use this module, add the following configuration block to the modules array i
         maximumEntries: 10, // Maximum number of entries shown in table
         updateInterval: 1 * 60 * 1000, // Update interval in microseconds
         stop: "",
-        stopID: 100010, // ID of the stop
     }
 },
 
