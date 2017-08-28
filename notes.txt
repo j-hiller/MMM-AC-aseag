@@ -1,0 +1,7 @@
+'http://ivu.aseag.de/interfaces/ura/instant_V2'
+
+'ReturnList': 'LineName,DestinationName,DestinationText,EstimatedTime'
+
+'StopID': 100010
+
+http://ivu.aseag.de/interfaces/ura/instant_V2?ReturnList=LineName,DestinationText,EstimatedTime&StopID=100010

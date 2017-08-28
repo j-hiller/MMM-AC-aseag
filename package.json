@@ -1,0 +1,15 @@
+{
+  "name": "MMM-AC-aseag",
+  "version": "0.1.0",
+  "description": "Plugin for displaying the realtime departures of busses in Aachen, Germany",
+  "main": "MMM-AC-aseag.js",
+  "author": "neandertaler19",
+  "license": "MIT",
+  "devDependencies": {
+    "request": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neandertaler19/MMM-AC-aseag"
+  }
+}
