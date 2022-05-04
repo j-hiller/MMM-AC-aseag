@@ -6,39 +6,110 @@
  */
 
 var NodeHelper = require("node_helper");
-var request = require("request");
+var axios = require("axios").default;
 
 module.exports = NodeHelper.create({
 
 	updateTimetable: function(stopID) {
 		var self = this;
-		// URL for querying the bus stop departures
-		var urlApi = "http://ivu.aseag.de/interfaces/ura/instant_V2?ReturnList=LineName,DestinationText,EstimatedTime&StopID=" + stopID;
-
-		// Send a request for the departures
-		request({
-			url: urlApi,
-			method: "GET"
-		}, function(error, response, body) {
-			// Repair the JSON
-			var str = "[" + body.split("\n").slice(1).join(",") + "]";
-			// Parse the result
-			var jsonObj = JSON.parse(str);
-			// Sort the array by the departure
-			jsonObj.sort(function(a, b) {
-				if (a[3] == b[3]) {
-					return 0;
-				}
-				if (a[3] < b[3]) {
-					return -1;
-				}
-				if (a[3] > b[3]) {
-					return 1;
-				}
-			});
-			// Send it back to the main function
-			self.sendSocketNotification("BUSSES", jsonObj);
-		});
+		let mockData = [
+			{
+			  timestamp: '2022-05-02 13:20',
+			  arrival: 10,
+			  name: 'Linie E',
+			  track: 'H.2',
+			  direction: 'Europadorf'
+			},
+			{
+			  timestamp: '2022-05-02 13:22',
+			  arrival: 12,
+			  name: 'Linie 3B',
+			  track: 'H.5',
+			  direction: 'Hauptbahnhof - Schanz - Uniklinik'
+			},
+			{
+			  timestamp: '2022-05-02 13:24',
+			  arrival: 14,
+			  name: 'Linie 43',
+			  track: 'H.1',
+			  direction: 'Aachen Bushof - Uniklinik'
+			},
+			{
+			  timestamp: '2022-05-02 13:24',
+			  arrival: 14,
+			  name: 'Linie 47',
+			  track: 'H.1',
+			  direction: 'Hüls Schulzentrum'
+			},
+			{
+			  timestamp: '2022-05-02 13:25',
+			  arrival: 15,
+			  name: 'Linie 43',
+			  track: 'H.2',
+			  direction: 'Laurensberg Rahe Im Ring'
+			},
+			{
+			  timestamp: '2022-05-02 13:25',
+			  arrival: 15,
+			  name: 'Linie 27',
+			  track: 'H.2',
+			  direction: 'Kohlscheid Bank'
+			},
+			{
+			  timestamp: '2022-05-02 13:25',
+			  arrival: 15,
+			  name: 'Linie 33',
+			  track: 'H.1',
+			  direction: 'Fuchserde'
+			},
+			{
+			  timestamp: '2022-05-02 13:26',
+			  arrival: 16,
+			  name: 'Linie 73',
+			  track: 'H.2',
+			  direction: 'Campus Melaten - Uniklinik'
+			},
+			{
+			  timestamp: '2022-05-02 13:27',
+			  arrival: 17,
+			  name: 'Linie 37',
+			  track: 'H.1',
+			  direction: 'Normaluhr (Ronheider Weg)'
+			},
+			{
+			  timestamp: '2022-05-02 13:29',
+			  arrival: 19,
+			  name: 'Linie 13B',
+			  track: 'H.5',
+			  direction: 'Hauptbahnhof - Schanz - Ponttor'
+			},
+			{
+			  timestamp: '2022-05-02 13:30',
+			  arrival: 20,
+			  name: 'Linie 147',
+			  track: 'H.2',
+			  direction: 'Schnellbus Merkstein'
+			},
+			{
+			  timestamp: '2022-05-02 13:30',
+			  arrival: 20,
+			  name: 'Linie 17',
+			  track: 'H.2',
+			  direction: 'Locht Zollmuseum'
+			},
+			{
+			  timestamp: '2022-05-02 13:30',
+			  arrival: 20,
+			  name: 'Linie 7',
+			  track: 'H.2',
+			  direction: 'Richterich Schönau'
+			}
+		  ];
+		  
+					
+		  
+		self.sendSocketNotification("BUSSES", mockData);
+		
 	},
 
 	extractID: function(name) {
