@@ -12,9 +12,7 @@ Module.register("MMM-AC-aseag", {
 		retryDelay: 5000,	// Delay for retrying
 		maximumEntries: 10, // Maximum entries shown
 		updateInterval: 1 * 60 * 1000, // Update every minute.
-		stop: "",	// The name of the stop. If you leave this empty, the ID will be used
 		stopID: 1055, // Stop for displaying the departures
-		accessId: "",
 	},
 
 	start: function() {
@@ -23,18 +21,13 @@ Module.register("MMM-AC-aseag", {
 		this.busses = [];
 		this.loaded = false;
 		this.updateTimer = null;
-		// If a name is provided, get it's ID
-		if (this.config.stop != "") {
-			this.sendSocketNotification("GET_ID", this.config.stop);
-		} else {
-			// If not, directly use the ID and update the departures
-			this.updateBusses(this);
-		}
+		this.updateBusses(this);
+		
 	},
 
 	updateBusses: function (self) {
 		// Call the helper to get the busses
-		self.sendSocketNotification('GET_BUSSES', {self,config});
+		self.sendSocketNotification('GET_BUSSES', self.config.stopID);
 		// Configure it to be called every *updateInterval* minute
 		setTimeout(self.updateBusses, self.config.updateInterval, self);		
 	},
@@ -92,11 +85,6 @@ Module.register("MMM-AC-aseag", {
 			this.busses = payload;
 			this.loaded = true;
 			this.updateDom(this.config.animationSpeed);
-		}
-		if (notification == "RETURN_ID") {
-			this.config.stopID = payload;
-			Log.info("Stop ID: " + payload);
-			this.updateBusses(this);
 		}
 	},
 });
