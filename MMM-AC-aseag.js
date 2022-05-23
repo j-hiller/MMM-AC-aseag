@@ -14,6 +14,7 @@ Module.register("MMM-AC-aseag", {
 		updateInterval: 1 * 60 * 1000, // Update every minute.
 		stop: "",	// The name of the stop. If you leave this empty, the ID will be used
 		stopID: 1055, // Stop for displaying the departures
+		accessId: "",
 	},
 
 	start: function() {
@@ -33,7 +34,7 @@ Module.register("MMM-AC-aseag", {
 
 	updateBusses: function (self) {
 		// Call the helper to get the busses
-		self.sendSocketNotification('GET_BUSSES', self.config.stopID);
+		self.sendSocketNotification('GET_BUSSES', {self,config});
 		// Configure it to be called every *updateInterval* minute
 		setTimeout(self.updateBusses, self.config.updateInterval, self);		
 	},
