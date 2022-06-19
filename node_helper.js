@@ -15,7 +15,7 @@ module.exports = NodeHelper.create({
 		
 		let options = {
 			method: 'GET',
-			url: 'http://dev.serwm.com:4000/depatureboard/' + stopID,
+			url: 'https://serwm.com/avv/depatureboard/' + stopID,
 		};
 	
 		let busses = [];
@@ -23,7 +23,6 @@ module.exports = NodeHelper.create({
 		await axios.request(options).then(function (response){
 			busses = response.data;
 		})
-
 		self.sendSocketNotification("BUSSES", busses);
 	},
 

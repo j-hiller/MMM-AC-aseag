@@ -22,14 +22,14 @@ Module.register("MMM-AC-aseag", {
 		this.loaded = false;
 		this.updateTimer = null;
 		this.updateBusses(this);
-		
 	},
 
 	updateBusses: function (self) {
 		// Call the helper to get the busses
 		self.sendSocketNotification('GET_BUSSES', self.config.stopID);
 		// Configure it to be called every *updateInterval* minute
-		setTimeout(self.updateBusses, self.config.updateInterval, self);		
+		setTimeout(self.updateBusses, self.config.updateInterval, self);
+		
 	},
 
 	getDom: function() {
@@ -71,6 +71,18 @@ Module.register("MMM-AC-aseag", {
 			
 			row.appendChild(depCell);
 		})
+
+		let row = document.createElement("tr");
+		table.appendChild(row);
+		let emptycell = document.createElement("td");
+		row.appendChild(emptycell);
+
+		let timecell = document.createElement("td");
+		timecell.id = "tdTimeCell";
+		timecell.classname = "align-right trainto";
+		timecell.innerHTML = new Date().toLocaleTimeString("de-DE");
+		row.appendChild(timecell);
+		
 		return table;
 	},
 
