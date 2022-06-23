@@ -31,7 +31,7 @@ Module.register("MMM-AC-aseag", {
 		let payload = {"stopID": this.config.stopID, "accessID": this.config.accessID};
 		this.sendSocketNotification('GET_BUSSES', payload);
 		// Configure it to be called every *updateInterval* minute
-		setTimeout(self.updateBusses, this.config.updateInterval, self);		
+		setTimeout(self.updateBusses, this.config.updateInterval, self);
 	},
 
 	getDom: function() {
@@ -73,6 +73,18 @@ Module.register("MMM-AC-aseag", {
 			
 			row.appendChild(depCell);
 		})
+
+		let row = document.createElement("tr");
+		table.appendChild(row);
+		let emptycell = document.createElement("td");
+		row.appendChild(emptycell);
+
+		let timecell = document.createElement("td");
+		timecell.id = "tdTimeCell";
+		timecell.classname = "align-right trainto";
+		timecell.innerHTML = new Date().toLocaleTimeString("de-DE");
+		row.appendChild(timecell);
+		
 		return table;
 	},
 
