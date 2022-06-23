@@ -13,6 +13,7 @@ Module.register("MMM-AC-aseag", {
 		maximumEntries: 10, // Maximum entries shown
 		updateInterval: 1 * 60 * 1000, // Update every minute.
 		stopID: 1055, // Stop for displaying the departures
+		accessID: "access-id-here"
 	},
 
 	start: function() {
@@ -21,15 +22,16 @@ Module.register("MMM-AC-aseag", {
 		this.busses = [];
 		this.loaded = false;
 		this.updateTimer = null;
-		this.updateBusses(this);
+		// let accessID = 
+		this.updateBusses(this.config.accessID, this.config.stopID);
 	},
 
 	updateBusses: function (self) {
 		// Call the helper to get the busses
-		self.sendSocketNotification('GET_BUSSES', self.config.stopID);
+		let payload = {"stopID": this.config.stopID, "accessID": this.config.accessID};
+		this.sendSocketNotification('GET_BUSSES', payload);
 		// Configure it to be called every *updateInterval* minute
-		setTimeout(self.updateBusses, self.config.updateInterval, self);
-		
+		setTimeout(self.updateBusses, this.config.updateInterval, self);
 	},
 
 	getDom: function() {
@@ -90,8 +92,6 @@ Module.register("MMM-AC-aseag", {
 		return ["MMM-AC-aseag.css"];
 	},
 
-	// socketNotificationReceived from helper
-	// Not used at the moment
 	socketNotificationReceived: function (notification, payload) {
 		if (notification == "BUSSES") {
 			this.busses = payload;
