@@ -80,8 +80,6 @@ Module.register("MMM-AC-aseag", {
 		return ["MMM-AC-aseag.css"];
 	},
 
-	// socketNotificationReceived from helper
-	// Not used at the moment
 	socketNotificationReceived: function (notification, payload) {
 		if (notification == "BUSSES") {
 			this.busses = payload;

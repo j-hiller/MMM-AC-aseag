@@ -1,7 +1,7 @@
 /* Magic Mirror
  * Node Helper: MMM-AC-aseag
  *
- * By neandertaler19
+ * By joshua-martius
  * MIT Licensed.
  */
 
@@ -52,14 +52,6 @@ module.exports = NodeHelper.create({
 		self.sendSocketNotification("BUSSES", busses);
 	},
 
-	// Override socketNotificationReceived method.
-
-	/* socketNotificationReceived(notification, payload)
-	 * This method is called when a socket notification arrives.
-	 *
-	 * argument notification string - The identifier of the noitication.
-	 * argument payload mixed - The payload of the notification.
-	 */
 	socketNotificationReceived: function(notification, payload) {
 		const self = this;
 		if (notification == "GET_BUSSES") {
