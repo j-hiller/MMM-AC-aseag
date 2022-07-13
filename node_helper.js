@@ -38,7 +38,7 @@ module.exports = NodeHelper.create({
 				bus.track = e.track.substring(0,3);
 		
 				if(bus.arrival < 5 || bus.arrival > 15) return;
-				bus.name = e.Product.name.replace(/  +/g, ' ') + " (" + bus.track + ")";
+				bus.name = e.ProductAtStop.name.replace(/  +/g, ' ') + " (" + bus.track + ")";
 				bus.direction = e.direction.replace(/ - /g, "-");
 				busses.push(bus)
 			})
