@@ -12,8 +12,8 @@ Module.register("MMM-AC-aseag", {
 		retryDelay: 5000,	// Delay for retrying
 		maximumEntries: 10, // Maximum entries shown
 		updateInterval: 1 * 60 * 1000, // Update every minute.
-		stop: "Misereor",	// The name of the stop. If you leave this empty, the ID will be used
-		stopID: 100010, // Stop for displaying the departures
+		stopID: 1055, // Stop for displaying the departures
+		accessID: "access-id-here"
 	},
 
 	start: function() {
@@ -22,32 +22,21 @@ Module.register("MMM-AC-aseag", {
 		this.busses = [];
 		this.loaded = false;
 		this.updateTimer = null;
-		// If a name is provided, get it's ID
-		if (this.config.stop != "") {
-			this.sendSocketNotification("GET_ID", this.config.stop);
-		} else {
-			// If not, directly use the ID and update the departures
-			this.updateBusses(this);
-		}
+		// let accessID = 
+		this.updateBusses(this.config.accessID, this.config.stopID);
 	},
 
 	updateBusses: function (self) {
 		// Call the helper to get the busses
-		self.sendSocketNotification('GET_BUSSES', self.config.stopID);
+		let payload = {"stopID": this.config.stopID, "accessID": this.config.accessID};
+		this.sendSocketNotification('GET_BUSSES', payload);
 		// Configure it to be called every *updateInterval* minute
-		setTimeout(self.updateBusses, self.config.updateInterval, self);		
+		setTimeout(self.updateBusses, this.config.updateInterval, self);
 	},
 
 	getDom: function() {
 		// create element wrapper for show into the module
 		var wrapper = document.createElement("div");
-
-		// The ID is too low to be correct
-		if (this.config.id < 100000) {
-			wrapper.innerHTML = "The ID " +this.id + " provided is not correct";
-			wrapper.className = "dimmed light small";
-			return wrapper;
-		}
 
 		// Display text while loading the connections
 		if (!this.loaded) {
@@ -59,44 +48,43 @@ Module.register("MMM-AC-aseag", {
 		// Display the departures in a table
 		var table = document.createElement("table");
 		table.className = "small";
-		// The current time
-		var current = Date.now();
 
-		for (var b in this.busses) {
-			if (b > this.config.maximumEntries) {
-				break;
-			}
-			// Define the subarray for quick access
-			var bus = this.busses[b];
-			var departure = new Date(bus[3]).getTime();
-			var remaining = Math.round((departure - current)/1000/60);
-
+		this.busses.forEach(b => {
 			// Create a new row in the table
 			var row = document.createElement("tr");
 			table.appendChild(row);
-
+	
 			// Fill it with the line number
 			var lineCell = document.createElement("td");
 			lineCell.className = "align-right bright";
-			lineCell.innerHTML = bus[1];
+			lineCell.innerHTML = b.name;
 			row.appendChild(lineCell);
-
+	
 			// Fill it with the destination
 			var toCell = document.createElement("td");
 			toCell.classname = "align-right trainto"
-			toCell.innerHTML = bus[2];
+			toCell.innerHTML = b.direction;
 			row.appendChild(toCell);
-
+	
 			// Fill it with the departure time
 			var depCell = document.createElement("td");
 			depCell.className = "departuretime";
-			if (remaining <= 0){
-				depCell.innerHTML = "now";
-			} else {
-				depCell.innerHTML = remaining + " min";
-			}
+			depCell.innerHTML = b.arrival + " min";
+			
 			row.appendChild(depCell);
-		}
+		})
+
+		let row = document.createElement("tr");
+		table.appendChild(row);
+		let emptycell = document.createElement("td");
+		row.appendChild(emptycell);
+
+		let timecell = document.createElement("td");
+		timecell.id = "tdTimeCell";
+		timecell.classname = "align-right trainto";
+		timecell.innerHTML = new Date().toLocaleTimeString("de-DE");
+		row.appendChild(timecell);
+		
 		return table;
 	},
 
@@ -104,18 +92,11 @@ Module.register("MMM-AC-aseag", {
 		return ["MMM-AC-aseag.css"];
 	},
 
-	// socketNotificationReceived from helper
-	// Not used at the moment
 	socketNotificationReceived: function (notification, payload) {
 		if (notification == "BUSSES") {
 			this.busses = payload;
 			this.loaded = true;
 			this.updateDom(this.config.animationSpeed);
-		}
-		if (notification == "RETURN_ID") {
-			this.config.stopID = payload;
-			Log.info("Stop ID: " + payload);
-			this.updateBusses(this);
 		}
 	},
 });
