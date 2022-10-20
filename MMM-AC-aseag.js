@@ -23,15 +23,15 @@ Module.register("MMM-AC-aseag", {
 		this.loaded = false;
 		this.updateTimer = null;
 		// let accessID = 
-		this.updateBusses(this.config.accessID, this.config.stopID);
+		this.updateBusses(this);
 	},
 
 	updateBusses: function (self) {
 		// Call the helper to get the busses
-		let payload = {"stopID": this.config.stopID, "accessID": this.config.accessID};
-		this.sendSocketNotification('GET_BUSSES', payload);
+		let payload = {"stopID": self.config.stopID, "accessID": self.config.accessID};
+		self.sendSocketNotification('GET_BUSSES', payload);
 		// Configure it to be called every *updateInterval* minute
-		setTimeout(self.updateBusses, this.config.updateInterval, self);
+		setTimeout(self.updateBusses, self.config.updateInterval, self);
 	},
 
 	getDom: function() {
